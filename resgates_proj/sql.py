@@ -4,15 +4,15 @@ DECLARE @data_ref AS date = '{{data_ref}}';
 with cte_resgates as (
 
 	SELECT 
-		try_cast(mov.DT_LIQUIDACAO_FINANCEIRA as date)  as DT
+		try_cast(mov.DATA_Pagamento as date)  as DT
 		,dbops.isin_cota
 		,dbops.nome_fundo
-		,try_cast(mov.[VL_CORRIGIDO] as float(100)) as VL_CORRIGIDO
-		,mov.CD_TIPO
-	FROM [AUG_UPLOAD].[jcot].[movimentacoes] as mov
-	left join [Operacoes].dbo.fundosaugme as dbops
-		on dbops.codigo_no_adm=mov.CD_FUNDO
-	where mov.[CD_TIPO]<>'A' and mov.DT_LIQUIDACAO_FINANCEIRA>@data_ref and mov.DT_LIQUIDACAO_FINANCEIRA is not null
+		,try_cast(mov.[Valor_Atual] as float(100)) as VL_CORRIGIDO
+		,mov.MOVIMENTO
+		FROM [Risco].[movimentacoes].[movimentacoes_cotistas] as mov
+		left join [Operacoes].dbo.fundosaugme as dbops
+			on dbops.fundo_id=mov.ID_Fundo
+		where mov.[MOVIMENTO]<>'Aplicação' and mov.DATA_Pagamento>@data_ref and mov.DATA_Pagamento is not null
 
 )
 
