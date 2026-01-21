@@ -24,6 +24,7 @@ select
 	cte_resgates.nome_fundo
 	,cte_resgates.isin_cota
 	,(select sum(D1.VL_CORRIGIDO) from cte_resgates as D1 where D1.dt<=dateadd(day,1,@data_ref) and D1.nome_fundo=cte_resgates.nome_fundo	group by D1.nome_fundo)  as Ate_d1
+	,(select sum(d2.VL_CORRIGIDO) from cte_resgates as d2 where d2.dt<=dateadd(day,2,@data_ref) and d2.nome_fundo=cte_resgates.nome_fundo	group by d2.nome_fundo)  as Ate_d2
 	,(select sum(d7.VL_CORRIGIDO) from cte_resgates as d7 where d7.dt<=dateadd(day,7,@data_ref) and d7.nome_fundo=cte_resgates.nome_fundo	group by d7.nome_fundo)  as Ate_d7
 	,(select sum(d30.VL_CORRIGIDO) from cte_resgates as d30 where d30.dt<=dateadd(day,30,@data_ref) and d30.nome_fundo=cte_resgates.nome_fundo	group by d30.nome_fundo)  as Ate_d30
 	,(select sum(d60.VL_CORRIGIDO) from cte_resgates as d60 where d60.dt<=dateadd(day,60,@data_ref) and d60.nome_fundo=cte_resgates.nome_fundo	group by d60.nome_fundo)  as Ate_d60
@@ -41,6 +42,7 @@ group by cte_resgates.nome_fundo,cte_resgates.isin_cota
 
 select cte_resgates_D.nome_fundo
 	,try_cast(cte_resgates_D.Ate_d1/PL.patliq as decimal(10,6)) as AteD1
+	,try_cast(cte_resgates_D.Ate_d2/PL.patliq as decimal(10,6)) as AteD2
 	,try_cast(cte_resgates_D.Ate_d7/PL.patliq as decimal(10,6)) as AteD7
 	,try_cast(cte_resgates_D.Ate_d30/PL.patliq as decimal(10,6)) as AteD30
 	,try_cast(cte_resgates_D.Ate_d60/PL.patliq as decimal(10,6)) as AteD60

@@ -55,7 +55,7 @@ if __name__ == "__main__":
     if env_data:
         data_base = date.fromisoformat(env_data)
     else:
-        data_base = bizday_offset(cal, date.today(), -1)
+        data_base = bizday_offset(cal, date.today(), -2)
 
     # ------- Resgates -------
     df_resgates = executar_query_com_data(data_base, SQL_RESGATES)
